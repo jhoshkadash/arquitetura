@@ -6,45 +6,84 @@ public class Montador {
 
     public static void main(String[] args) throws IOException {
 
-        File assembly = new File("C:/Users/jhosh/Documents/GitHub/arquitetura/src/assembly.asm"); // Arquivo de entrada fica na mesma pasta do Montador.java
+        File assembly = new File("src/assembly.asm");
         Scanner sc = new Scanner(assembly);
-        Instruction inst = new Instruction();
-        List<String> instructionsPerLine = new ArrayList<>();
-        List<Label> labels = new ArrayList<>();
-        List<Instruction> instructions = new ArrayList<>();
-        String actual[];
+        List<List<String>> instructions = new ArrayList<>();
 
-        while (sc.hasNextLine()) { // Guardando as instruções em uma lista por linha.
-            instructionsPerLine.add(sc.nextLine());
+        while (sc.hasNextLine()) {
+            instructions.add(getLineInstructions(sc.nextLine()));
         }
-        int i = 0; // Contador para percorrer a lista de instruções.
+        System.out.println(instructions);
 
-        while (i < instructionsPerLine.size()) { // Percorrendo a lista de instruções por linha.
+        Hashtable<String, Integer> rInstructionHashtable = Instruction.getrFunctInstructionHashtable();
+        Hashtable<String, Integer> iInstructionHashtable = Instruction.getiOpCodHashtable();
+        Hashtable<String, Integer> jInstructionHashtable = Instruction.getjOpCodHashtable();
 
-            actual = instructionsPerLine.get(i).split(" "); // Dividindo a primeira linha em um array com cada instrução
-                                                            // para depois checkar se tem uma label ou não.
+        for (List<String> line : instructions) {
+            String command = line.get(0);
 
-            if (actual[0].contains(":")) // Checando se a primeira palavra da linha possui ":". Se tiver é criado um
-                                         // objeto Label e adicionado na lista de labels.
-            {
-                Label label = new Label();
-                label.setName(actual[0].substring(0, actual[0].length() - 1));
-                label.setLine(i);
-                labels.add(label);
-                System.out.println(label.getName() + " " + label.getLine()); // Printando o nome da label e a linha que
-                                                                             // ela está.
-            }
-            if (actual.length == 5) {
-                for (int j = 1; j < actual.length; j++) {
-
-                    inst.setName(actual[j]);
-                }
-            } else {
-                inst.setName(actual[i]);
-            }
-            i++;
         }
 
+        sc.close();
+    }
+
+    public static String toBinary(int number) {
+        return toBinary(number, 6);
+    }
+
+    public static String toBinary(int number, int bits) {
+        String binary = Integer.toBinaryString(number);
+        int binaryLength = binary.length();
+
+        if (binaryLength < bits) {
+            for (int i = 0; i < bits - binaryLength; i++) {
+                binary = "0" + binary;
+            }
+        }
+
+        return binary;
+    }
+
+    public static List<String> getLineInstructions(String line) {
+        if (line.contains(":"))
+            line = line.split(":")[1];
+        List<String> instructions = List.of(line.trim().replace(",", "").split(" "));
+
+        return instructions;
+    }
+
+    public static void removeSymbol(List<String> list) {
+
+        for (String i : list) {
+            if (i.contains("$")) {
+                i = toBinary(Integer.parseInt(i.replace("$", "")));
+            }
+        }
+
+    }
+
+    public static String handleRInstruction(List<String> list) {
+        Hashtable<String, Integer> rInstructionHashtable = Instruction.getrFunctInstructionHashtable();
+        String command = list.get(0);
+        String opCode = "000000";
+        String rs = "000000";
+        String rt = "000000";
+        String rd = "000000";
+        String sa = "000000";
+        String funct = toBinary(rInstructionHashtable.get(command));
+
+        switch (command) {
+            case "sll":
+                rd = list.get(1);
+                rt = list.get(2);
+                sa = toBinary(3);
+                break;
+
+            default:
+                break;
+        }
+
+        return null;
     }
 
 }

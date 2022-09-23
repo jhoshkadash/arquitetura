@@ -1,5 +1,5 @@
 public class Label {
-  String name;
+  private String name;
   int line;
   public String getName() {
     return name;

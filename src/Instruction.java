@@ -1,11 +1,15 @@
 public class Instruction {
-  String name;
+  private String opcode;
 
-  public String getName() {
-    return name;
+  public String getOpcode() {
+    return opcode;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setOpcode(String opcode) {
+    this.opcode = opcode;
   }
+
+  public void traduzir() {
+  }
+
 }

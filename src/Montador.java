@@ -25,7 +25,7 @@ public class Montador {
                                                                // em
                                                                // que aparecem.
             if (instructionsPerLine.get(i).contains(":")) { // Se tiver label, salva no vetor labels
-                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(i));
+                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(4194304+i*4));
             }
             instructions.add(List.of(returnInstruction(instructionsPerLine.get(i)))); // Salvando instruções em uma
                                                                                       // lista
@@ -37,7 +37,7 @@ public class Montador {
                 machineInstructions.add(codeForRType(instructions.get(i)));
             }
             if (tableofInstructions.I.containsKey(instructions.get(i).get(0))) {
-                machineInstructions.add(codeForIType(instructions.get(i)));
+                machineInstructions.add(codeForIType(instructions.get(i),4194304+i*4));
             }
             if (tableofInstructions.J.containsKey(instructions.get(i).get(0))) {
                 machineInstructions.add(codeForJType(instructions.get(i)));
@@ -54,6 +54,7 @@ public class Montador {
             bw.newLine();
 
         }
+        
         bw.close();
         fw.close();
         sc.close();
@@ -90,6 +91,9 @@ public class Montador {
                 bin = "0" + bin;
             }
         }
+        if (len > size) {
+            bin = bin.substring(len - size, len);
+        }
         return bin;
     }
 
@@ -118,6 +122,7 @@ public class Montador {
         }
         return newInstructions;
     }
+    
 
     public static List<String> codeForRType(List<String> instructions) { // retorna a instrução do tipo R em binário
         List<String> machineCode = new ArrayList<>();
@@ -176,7 +181,7 @@ public class Montador {
 
     }
 
-    public static List<String> codeForIType(List<String> instructions) { // retorna a instrução do tipo I em binário
+    public static List<String> codeForIType(List<String> instructions, int line) { // retorna a instrução do tipo I em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String rs = rzero;
@@ -188,7 +193,7 @@ public class Montador {
             case "beq", "bne":
                 rs = toBin(instructions.get(1), 5);
                 rt = toBin(instructions.get(2), 5);
-                immediate = toBin(labels.get(instructions.get(3)), 16);
+                immediate = toBin(Integer.toString(((Integer.parseInt(labels.get(instructions.get(3))))-(line+4))/4), 16);                            
                 opcode = tableofInstructions.I.get(command);
                 machineCode.add(opcode + rs + rt + immediate);
                 return machineCode;
@@ -228,7 +233,7 @@ public class Montador {
         instructions = removeDSignFromInst(instructions);
         switch (command) {
             case "j", "jal":
-                address = toBin(labels.get(instructions.get(1)), 26);
+                address = toBin(labels.get(instructions.get(1)), 26);                          
                 opcode = tableofInstructions.J.get(command);
                 machineCode.add(opcode + address);
                 return machineCode;

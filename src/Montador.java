@@ -43,7 +43,20 @@ public class Montador {
                 machineInstructions.add(codeForJType(instructions.get(i)));
             }
         }
-        System.out.println(machineInstructions); //Testando resultado
+        // System.out.println(machineInstructions); //Testando resultado
+        File binary = new File("src/binary.bin");
+        FileWriter fw = new FileWriter(binary);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        for (List<String> instruction : machineInstructions) {
+            String line = instruction.get(0);
+            bw.write(line);
+            bw.newLine();
+
+        }
+        bw.close();
+        fw.close();
+        sc.close();
     }
 
     public static String[] returnInstruction(String instructionsPerLine) {
@@ -61,7 +74,7 @@ public class Montador {
         }
     }
 
-    public static String saveLabel(String instructionsPerLine) {    //Salva a label na tabela de labels
+    public static String saveLabel(String instructionsPerLine) { // Salva a label na tabela de labels
         String label = instructionsPerLine.split(":")[0];
         return label; // Retorna a label da linha.
 
@@ -92,7 +105,7 @@ public class Montador {
         return newInstructions;
     }
 
-    public static List<String> removeParenthesisFromInst(List<String> instructions) {   // remove () from instructions
+    public static List<String> removeParenthesisFromInst(List<String> instructions) { // remove () from instructions
         List<String> newInstructions = new ArrayList<>();
         for (int i = 0; i < instructions.size(); i++) {
             if (instructions.get(i).contains("(")) {
@@ -106,7 +119,7 @@ public class Montador {
         return newInstructions;
     }
 
-    public static List<String> codeForRType(List<String> instructions) {    // retorna a instrução do tipo R em binário
+    public static List<String> codeForRType(List<String> instructions) { // retorna a instrução do tipo R em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String rs = rzero;
@@ -207,7 +220,7 @@ public class Montador {
 
     }
 
-    public static List<String> codeForJType(List<String> instructions) { //Retorna a instrução do tipo J em binário
+    public static List<String> codeForJType(List<String> instructions) { // Retorna a instrução do tipo J em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String address = "00000000000000000000000000";

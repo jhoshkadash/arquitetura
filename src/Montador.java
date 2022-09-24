@@ -224,6 +224,7 @@ public class Montador {
         }
 
     }
+    
 
     public static List<String> codeForJType(List<String> instructions) { // Retorna a instrução do tipo J em binário
         List<String> machineCode = new ArrayList<>();
@@ -233,7 +234,10 @@ public class Montador {
         instructions = removeDSignFromInst(instructions);
         switch (command) {
             case "j", "jal":
-                address = toBin(labels.get(instructions.get(1)), 26);                          
+                address = toBin(labels.get(instructions.get(1)), 26); 
+                address = address.substring(0, address.length()-2); 
+                address = "00"+address;
+                System.out.println(address);                        
                 opcode = tableofInstructions.J.get(command);
                 machineCode.add(opcode + address);
                 return machineCode;

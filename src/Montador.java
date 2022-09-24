@@ -44,7 +44,7 @@ public class Montador {
             }
         }
         // System.out.println(machineInstructions); //Testando resultado
-        File binary = new File("src/binary.bin");
+        File binary = new File("bin/binary.bin");
         FileWriter fw = new FileWriter(binary);
         BufferedWriter bw = new BufferedWriter(fw);
 

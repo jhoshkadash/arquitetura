@@ -1,4 +1,5 @@
 import java.util.Hashtable;
+//Tabela com valores de instruções em binário
 
 public class Instructions {
   Hashtable<String, String> R;

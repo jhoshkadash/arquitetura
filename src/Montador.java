@@ -25,7 +25,7 @@ public class Montador {
                                                                // em
                                                                // que aparecem.
             if (instructionsPerLine.get(i).contains(":")) { // Se tiver label, salva no vetor labels
-                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(i * 4));
+                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(i));
             }
             instructions.add(List.of(returnInstruction(instructionsPerLine.get(i)))); // Salvando instruções em uma
                                                                                       // lista
@@ -43,7 +43,7 @@ public class Montador {
                 machineInstructions.add(codeForJType(instructions.get(i)));
             }
         }
-        System.out.println(machineInstructions);
+        System.out.println(machineInstructions); //Testando resultado
     }
 
     public static String[] returnInstruction(String instructionsPerLine) {
@@ -61,7 +61,7 @@ public class Montador {
         }
     }
 
-    public static String saveLabel(String instructionsPerLine) {
+    public static String saveLabel(String instructionsPerLine) {    //Salva a label na tabela de labels
         String label = instructionsPerLine.split(":")[0];
         return label; // Retorna a label da linha.
 
@@ -80,7 +80,7 @@ public class Montador {
         return bin;
     }
 
-    public static List<String> removeDSignFromInst(List<String> instructions) {
+    public static List<String> removeDSignFromInst(List<String> instructions) { // remove $ from registers instructions
         List<String> newInstructions = new ArrayList<>();
         for (int i = 0; i < instructions.size(); i++) {
             if (instructions.get(i).contains("$")) {
@@ -92,7 +92,7 @@ public class Montador {
         return newInstructions;
     }
 
-    public static List<String> removeParenthesisFromInst(List<String> instructions) {
+    public static List<String> removeParenthesisFromInst(List<String> instructions) {   // remove () from instructions
         List<String> newInstructions = new ArrayList<>();
         for (int i = 0; i < instructions.size(); i++) {
             if (instructions.get(i).contains("(")) {
@@ -106,7 +106,7 @@ public class Montador {
         return newInstructions;
     }
 
-    public static List<String> codeForRType(List<String> instructions) {
+    public static List<String> codeForRType(List<String> instructions) {    // retorna a instrução do tipo R em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String rs = rzero;
@@ -163,7 +163,7 @@ public class Montador {
 
     }
 
-    public static List<String> codeForIType(List<String> instructions) {
+    public static List<String> codeForIType(List<String> instructions) { // retorna a instrução do tipo I em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String rs = rzero;
@@ -207,7 +207,7 @@ public class Montador {
 
     }
 
-    public static List<String> codeForJType(List<String> instructions) {
+    public static List<String> codeForJType(List<String> instructions) { //Retorna a instrução do tipo J em binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String address = "00000000000000000000000000";

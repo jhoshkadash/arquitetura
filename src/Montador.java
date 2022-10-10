@@ -9,10 +9,14 @@ public class Montador {
     static final Instructions tableofInstructions = new Instructions();
 
     public static void main(String[] args) throws IOException {
+        Scanner sc1 = new Scanner(System.in);
+        System.out.println("Digite o nome do arquivo de entrada:");
+        String input = sc1.nextLine();
+        sc1.close();
 
-        File assembly = new File("src/assembly.asm"); // Arquivo de entrada
-                                                      // fica na mesma pasta
-                                                      // do Montador.java
+        File assembly = new File("src/",input); // Arquivo de entrada
+                                         // fica na mesma pasta
+                                         // do Montador.java
         Scanner sc = new Scanner(assembly); // Scanner para ler o arquivo de entrada
         List<String> instructionsPerLine = new ArrayList<>();
         List<List<String>> instructions = new ArrayList<>();
@@ -25,7 +29,7 @@ public class Montador {
                                                                // em
                                                                // que aparecem.
             if (instructionsPerLine.get(i).contains(":")) { // Se tiver label, salva no vetor labels
-                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(4194304+i*4));
+                labels.put(saveLabel(instructionsPerLine.get(i)), Integer.toString(4194304 + i * 4));
             }
             instructions.add(List.of(returnInstruction(instructionsPerLine.get(i)))); // Salvando instruções em uma
                                                                                       // lista
@@ -37,7 +41,7 @@ public class Montador {
                 machineInstructions.add(codeForRType(instructions.get(i)));
             }
             if (tableofInstructions.I.containsKey(instructions.get(i).get(0))) {
-                machineInstructions.add(codeForIType(instructions.get(i),4194304+i*4));
+                machineInstructions.add(codeForIType(instructions.get(i), 4194304 + i * 4));
             }
             if (tableofInstructions.J.containsKey(instructions.get(i).get(0))) {
                 machineInstructions.add(codeForJType(instructions.get(i)));
@@ -54,7 +58,7 @@ public class Montador {
             bw.newLine();
 
         }
-        
+
         bw.close();
         fw.close();
         sc.close();
@@ -122,7 +126,6 @@ public class Montador {
         }
         return newInstructions;
     }
-    
 
     public static List<String> codeForRType(List<String> instructions) { // retorna a instrução do tipo R em binário
         List<String> machineCode = new ArrayList<>();
@@ -181,7 +184,8 @@ public class Montador {
 
     }
 
-    public static List<String> codeForIType(List<String> instructions, int line) { // retorna a instrução do tipo I em binário
+    public static List<String> codeForIType(List<String> instructions, int line) { // retorna a instrução do tipo I em
+                                                                                   // binário
         List<String> machineCode = new ArrayList<>();
         String opcode = opfczero;
         String rs = rzero;
@@ -193,7 +197,8 @@ public class Montador {
             case "beq", "bne":
                 rs = toBin(instructions.get(1), 5);
                 rt = toBin(instructions.get(2), 5);
-                immediate = toBin(Integer.toString(((Integer.parseInt(labels.get(instructions.get(3))))-(line+4))/4), 16);                            
+                immediate = toBin(
+                        Integer.toString(((Integer.parseInt(labels.get(instructions.get(3)))) - (line + 4)) / 4), 16);
                 opcode = tableofInstructions.I.get(command);
                 machineCode.add(opcode + rs + rt + immediate);
                 return machineCode;
@@ -224,7 +229,6 @@ public class Montador {
         }
 
     }
-    
 
     public static List<String> codeForJType(List<String> instructions) { // Retorna a instrução do tipo J em binário
         List<String> machineCode = new ArrayList<>();
@@ -234,10 +238,10 @@ public class Montador {
         instructions = removeDSignFromInst(instructions);
         switch (command) {
             case "j", "jal":
-                address = toBin(labels.get(instructions.get(1)), 26); 
-                address = address.substring(0, address.length()-2); 
-                address = "00"+address;
-                System.out.println(address);                        
+                address = toBin(labels.get(instructions.get(1)), 26);
+                address = address.substring(0, address.length() - 2);
+                address = "00" + address;
+                //System.out.println(address);
                 opcode = tableofInstructions.J.get(command);
                 machineCode.add(opcode + address);
                 return machineCode;

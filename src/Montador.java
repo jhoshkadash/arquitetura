@@ -14,7 +14,7 @@ public class Montador {
         String input = sc1.nextLine();
         sc1.close();
 
-        File assembly = new File("src/",input); // Arquivo de entrada
+        File assembly = new File(input); // Arquivo de entrada
                                          // fica na mesma pasta
                                          // do Montador.java
         Scanner sc = new Scanner(assembly); // Scanner para ler o arquivo de entrada
@@ -48,7 +48,8 @@ public class Montador {
             }
         }
         // System.out.println(machineInstructions); //Testando resultado
-        File binary = new File("bin/binary.bin");
+        input = input.substring(0,input.length()-4);
+        File binary = new File("../bin/"+input+".bin");
         FileWriter fw = new FileWriter(binary);
         BufferedWriter bw = new BufferedWriter(fw);
 

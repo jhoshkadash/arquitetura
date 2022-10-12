@@ -14,9 +14,9 @@ public class Montador {
         String input = sc1.nextLine();
         sc1.close();
 
-        File assembly = new File("src/",input); // Arquivo de entrada
-                                         // fica na mesma pasta
-                                         // do Montador.java
+        File assembly = new File("src/", input); // Arquivo de entrada
+        // fica na mesma pasta
+        // do Montador.java
         Scanner sc = new Scanner(assembly); // Scanner para ler o arquivo de entrada
         List<String> instructionsPerLine = new ArrayList<>();
         List<List<String>> instructions = new ArrayList<>();
@@ -207,16 +207,17 @@ public class Montador {
                 rs = toBin(instructions.get(2), 5);
                 immediate = toBin(instructions.get(3), 16);
                 opcode = tableofInstructions.I.get(command);
-                machineCode.add(opcode + rs + rt + immediate);
+                machineCode.add(opcode + rs + rt + immediate);                
                 return machineCode;
-            case "lui":
+            case "lui": 
                 rt = toBin(instructions.get(1), 5);
                 immediate = toBin(instructions.get(2), 16);
                 opcode = tableofInstructions.I.get(command);
                 machineCode.add(opcode + rs + rt + immediate);
                 return machineCode;
             case "lw", "sw":
-                instructions = removeParenthesisFromInst(instructions);
+                instructions = removeParenthesisFromInst(instructions);                
+                
                 rt = toBin(instructions.get(1), 5);
                 rs = toBin(instructions.get(3), 5);
                 immediate = toBin(instructions.get(2), 16);
@@ -241,7 +242,7 @@ public class Montador {
                 address = toBin(labels.get(instructions.get(1)), 26);
                 address = address.substring(0, address.length() - 2);
                 address = "00" + address;
-                //System.out.println(address);
+                // System.out.println(address);
                 opcode = tableofInstructions.J.get(command);
                 machineCode.add(opcode + address);
                 return machineCode;

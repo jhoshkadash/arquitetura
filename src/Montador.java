@@ -116,14 +116,14 @@ public class Montador {
     public static List<String> removeParenthesisFromInst(List<String> instructions) { // remove () from instructions
         List<String> newInstructions = new ArrayList<>();
         for (int i = 0; i < instructions.size(); i++) {
-            if (instructions.get(i).contains("(")) {
-                newInstructions.add(instructions.get(i).replace("(", ""));
-            } else if (instructions.get(i).contains(")")) {
-                newInstructions.add(instructions.get(i).replace(")", ""));
-            } else {
+            if (instructions.get(i).contains("(") || instructions.get(i).contains(")")) {
+                String[] auxString = instructions.get(i).split("\\(");
+                newInstructions.add(auxString[0]);
+                newInstructions.add(auxString[1].replace(")", ""));
+            } else
                 newInstructions.add(instructions.get(i));
-            }
         }
+
         return newInstructions;
     }
 
@@ -193,6 +193,7 @@ public class Montador {
         String immediate = "0000000000000000";
         String command = instructions.get(0);
         instructions = removeDSignFromInst(instructions);
+
         switch (command) {
             case "beq", "bne":
                 rs = toBin(instructions.get(1), 5);
@@ -207,17 +208,16 @@ public class Montador {
                 rs = toBin(instructions.get(2), 5);
                 immediate = toBin(instructions.get(3), 16);
                 opcode = tableofInstructions.I.get(command);
-                machineCode.add(opcode + rs + rt + immediate);                
+                machineCode.add(opcode + rs + rt + immediate);
                 return machineCode;
-            case "lui": 
+            case "lui":
                 rt = toBin(instructions.get(1), 5);
                 immediate = toBin(instructions.get(2), 16);
                 opcode = tableofInstructions.I.get(command);
                 machineCode.add(opcode + rs + rt + immediate);
                 return machineCode;
             case "lw", "sw":
-                instructions = removeParenthesisFromInst(instructions);                
-                
+                instructions = removeParenthesisFromInst(instructions);
                 rt = toBin(instructions.get(1), 5);
                 rs = toBin(instructions.get(3), 5);
                 immediate = toBin(instructions.get(2), 16);
@@ -242,7 +242,6 @@ public class Montador {
                 address = toBin(labels.get(instructions.get(1)), 26);
                 address = address.substring(0, address.length() - 2);
                 address = "00" + address;
-                // System.out.println(address);
                 opcode = tableofInstructions.J.get(command);
                 machineCode.add(opcode + address);
                 return machineCode;
